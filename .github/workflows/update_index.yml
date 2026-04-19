@@ -1,0 +1,30 @@
+name: Auto Update Index HTML
+
+on:
+  push:
+    paths:
+      - 'images/**' # images 폴더에 변화가 생기면 작동합니다.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run make_html script
+        run: node make_html.js # 우리가 만든 스크립트를 로봇이 실행합니다.
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Auto update index.html with new images" || exit 0
+          git push
