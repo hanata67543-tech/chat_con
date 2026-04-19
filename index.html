@@ -35,11 +35,10 @@
             border-radius: 5px;
         }
         
-        /* 토스트 알림창 디자인 */
         #toast {
             visibility: hidden;
             min-width: 250px;
-            background-color: #00ffa3; /* 치지직 시그니처 컬러 느낌 */
+            background-color: #00ffa3; 
             color: #000;
             font-weight: bold;
             text-align: center;
@@ -68,12 +67,12 @@
     <div id="toast">명령어가 복사되었습니다!</div>
 
     <div class="emoticon-grid">
-        <div class="emoticon-item" onclick="copyCommand('~사과')">
+        <div class="emoticon-item" onclick="autoCopy(this)">
             <img src="images/사과.png" alt="사과">
             <p>~사과</p>
         </div>
 
-        <div class="emoticon-item" onclick="copyCommand('~만랩')">
+        <div class="emoticon-item" onclick="autoCopy(this)">
             <img src="images/만랩.png" alt="만랩">
             <p>~만랩</p>
         </div>
@@ -81,7 +80,30 @@
         </div>
 
     <script>
-        function copyCommand(command) {
+        // 파일명을 스스로 읽어서 ~명령어로 바꿔 복사해주는 똑똑한 함수
+        function autoCopy(element) {
+            // 1. 클릭한 박스 안에서 이미지(img) 태그를 찾습니다.
+            const imgTag = element.querySelector('img');
+            
+            // 2. 이미지의 경로(src)를 가져옵니다. (예: "images/사과.png")
+            let src = imgTag.getAttribute('src');
+            
+            // 3. 경로에서 맨 뒤에 있는 파일명만 뽑아냅니다. (예: "사과.png")
+            let filename = src.split('/').pop();
+            
+            // 4. (중요) 인터넷 주소창 규칙 때문에 한글이 '%EC...' 처럼 깨진 걸 원래 한글로 되돌립니다.
+            filename = decodeURIComponent(filename);
+            
+            // 5. 맨 뒤의 점(.)을 기준으로 확장자를 떼어냅니다. (예: "사과")
+            let nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+            
+            // 만약 확장자가 없는 파일명이라면 원본 유지
+            if (!nameWithoutExt) nameWithoutExt = filename;
+            
+            // 6. 파일명 앞에 '~'를 붙여서 명령어 완성!
+            let command = "~" + nameWithoutExt;
+
+            // 7. 클립보드에 복사
             navigator.clipboard.writeText(command).then(() => {
                 showToast(`'${command}' 복사 완료!`);
             }).catch(err => {
