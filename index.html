@@ -5,116 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>채팅콘 선택기</title>
     <style>
-        /* 🎨 시청자들을 위한 깔끔한 블랙 테마 */
-        :root {
-            --bg: #121212;
-            --card: #1e1e1e;
-            --accent: #00ffa3; /* 강조색 */
-            --text: #e0e0e0;
-        }
-        body {
-            font-family: 'Pretendard', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        h1 { font-size: 24px; color: white; margin-bottom: 10px; }
-        .sub { color: #888; font-size: 14px; margin-bottom: 40px; }
-
-        .emoticon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 16px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .emoticon-item {
-            background: var(--card);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px 10px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .emoticon-item:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-        }
-        .emoticon-item img {
-            width: 75px;
-            height: 75px;
-            object-fit: contain;
-            margin-bottom: 12px;
-        }
-        .emoticon-item p {
-            margin: 0;
-            font-size: 13px;
-            font-weight: bold;
-            color: #bbb;
-        }
-        .emoticon-item:hover p { color: var(--accent); }
-
-        /* 복사 알림창 */
-        #toast {
-            visibility: hidden;
-            min-width: 200px;
-            background-color: var(--accent);
-            color: #000;
-            font-weight: bold;
-            padding: 12px 24px;
-            position: fixed;
-            left: 50%;
-            bottom: 40px;
-            transform: translateX(-50%);
-            border-radius: 50px;
-            z-index: 1000;
-        }
-        #toast.show { visibility: visible; animation: popUp 0.4s, fadeOut 0.4s 2.5s; }
-        @keyframes popUp { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        :root { --bg: #121212; --card: #1e1e1e; --accent: #00ffa3; --text: #e0e0e0; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px 20px; text-align: center; }
+        .emoticon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; max-width: 900px; margin: 40px auto 0; }
+        .emoticon-item { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 20px 10px; cursor: pointer; transition: 0.2s; }
+        .emoticon-item:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .emoticon-item img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 12px; }
+        .emoticon-item p { margin: 0; font-size: 13px; font-weight: bold; color: #bbb; }
+        #toast { visibility: hidden; background: var(--accent); color: #000; padding: 12px 24px; position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); border-radius: 50px; font-weight: bold; }
+        #toast.show { visibility: visible; animation: f 0.4s, g 0.4s 2.5s; }
+        @keyframes f { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
+        @keyframes g { from { opacity: 1; } to { opacity: 0; } }
     </style>
 </head>
 <body>
-
     <h1>채팅콘 메뉴판</h1>
-    <p class="sub">클릭하면 명령어가 복사됩니다!</p>
-
+    <p>이미지를 클릭하면 명령어가 복사됩니다!</p>
     <div id="toast">복사 완료!</div>
-
     <div class="emoticon-grid">
-        </div>
-
+        <div class="emoticon-item" onclick="cp('~target')">
+                <img src="images/target.png">
+                <p>~target</p>
+            </div><div class="emoticon-item" onclick="cp('~고자라니')">
+                <img src="images/고자라니.gif">
+                <p>~고자라니</p>
+            </div><div class="emoticon-item" onclick="cp('~기가차드')">
+                <img src="images/기가차드.png">
+                <p>~기가차드</p>
+            </div><div class="emoticon-item" onclick="cp('~기가차드2')">
+                <img src="images/기가차드2.png">
+                <p>~기가차드2</p>
+            </div><div class="emoticon-item" onclick="cp('~기가차드협박')">
+                <img src="images/기가차드협박.jpg">
+                <p>~기가차드협박</p>
+            </div><div class="emoticon-item" onclick="cp('~단죄')">
+                <img src="images/단죄.gif">
+                <p>~단죄</p>
+            </div><div class="emoticon-item" onclick="cp('~따봉')">
+                <img src="images/따봉.jpg">
+                <p>~따봉</p>
+            </div><div class="emoticon-item" onclick="cp('~서러워')">
+                <img src="images/서러워.png">
+                <p>~서러워</p>
+            </div><div class="emoticon-item" onclick="cp('~우는고양이')">
+                <img src="images/우는고양이.gif">
+                <p>~우는고양이</p>
+            </div><div class="emoticon-item" onclick="cp('~웃음')">
+                <img src="images/웃음.png">
+                <p>~웃음</p>
+            </div><div class="emoticon-item" onclick="cp('~으흐흐흐')">
+                <img src="images/으흐흐흐.gif">
+                <p>~으흐흐흐</p>
+            </div><div class="emoticon-item" onclick="cp('~의사양반')">
+                <img src="images/의사양반.gif">
+                <p>~의사양반</p>
+            </div><div class="emoticon-item" onclick="cp('~쨍그랑')">
+                <img src="images/쨍그랑.png">
+                <p>~쨍그랑</p>
+            </div><div class="emoticon-item" onclick="cp('~차드없음')">
+                <img src="images/차드없음.jpg">
+                <p>~차드없음</p>
+            </div><div class="emoticon-item" onclick="cp('~페페기대')">
+                <img src="images/페페기대.png">
+                <p>~페페기대</p>
+            </div><div class="emoticon-item" onclick="cp('~페페따봉')">
+                <img src="images/페페따봉.png">
+                <p>~페페따봉</p>
+            </div><div class="emoticon-item" onclick="cp('~페페분노')">
+                <img src="images/페페분노.png">
+                <p>~페페분노</p>
+            </div><div class="emoticon-item" onclick="cp('~페페의문')">
+                <img src="images/페페의문.png">
+                <p>~페페의문</p>
+            </div>
+    </div>
     <script>
-        // 파일명을 읽어서 자동으로 ~이름표를 달아주는 함수
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll('.emoticon-item').forEach(item => {
-                const img = item.querySelector('img');
-                if (img) {
-                    const src = img.getAttribute('src');
-                    const fileName = decodeURIComponent(src.split('/').pop());
-                    const nameOnly = fileName.substring(0, fileName.lastIndexOf('.'));
-                    const p = document.createElement('p');
-                    p.innerText = "~" + nameOnly;
-                    item.appendChild(p);
-                }
-            });
-        });
-
-        // 클릭 시 복사 기능 (모바일/PC 공용)
-        function autoCopy(el) {
-            const cmd = el.querySelector('p').innerText;
+        function cp(c) {
             const t = document.createElement("textarea");
-            document.body.appendChild(t);
-            t.value = cmd; t.select();
-            document.execCommand('copy');
-            document.body.removeChild(t);
-            
-            const toast = document.getElementById('toast');
-            toast.innerText = `'${cmd}' 복사 완료!`;
-            toast.className = "show";
-            setTimeout(() => { toast.className = ""; }, 3000);
+            document.body.appendChild(t); t.value = c; t.select();
+            document.execCommand('copy'); document.body.removeChild(t);
+            const s = document.getElementById('toast');
+            s.innerText = "'" + c + "' 복사 완료!";
+            s.className = "show"; setTimeout(() => { s.className = ""; }, 3000);
         }
     </script>
 </body>
