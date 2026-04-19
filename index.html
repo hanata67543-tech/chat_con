@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅콘 선택기</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #2b2b2b;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        .emoticon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .emoticon-item {
+            background-color: #3b3b3b;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .emoticon-item:hover {
+            transform: scale(1.05);
+            background-color: #4b4b4b;
+        }
+        .emoticon-item img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #00ffa3; 
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <h1>명령어를 클릭하면 복사됩니다!</h1>
+    <p>채팅창에 붙여넣기(Ctrl+V) 해서 사용해 보세요.</p>
+
+    <div id="toast">명령어가 복사되었습니다!</div>
+
+    <div class="emoticon-grid">
+        
+        <div class="emoticon-item" onclick="autoCopy(this)">
+            <img src="images/사과.png">
+        </div>
+
+        <div class="emoticon-item" onclick="autoCopy(this)">
+            <img src="images/만랩.png">
+        </div>
+
+        </div>
+
+    <script>
+        // 🌟 1. 페이지가 켜질 때, 이미지 파일명을 읽어서 밑에 이름표를 자동으로 달아주는 마법!
+        document.addEventListener("DOMContentLoaded", function() {
+            const items = document.querySelectorAll('.emoticon-item');
+            
+            items.forEach(item => {
+                const imgTag = item.querySelector('img');
+                if (imgTag) {
+                    let src = imgTag.getAttribute('src');
+                    let filename = src.split('/').pop();
+                    filename = decodeURIComponent(filename); // 한글 깨짐 방지
+                    let nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+                    if (!nameWithoutExt) nameWithoutExt = filename;
+                    
+                    // 알아서 <p>~명령어</p> 를 만들어서 이미지 밑에 쏙 넣어줍니다.
+                    const pTag = document.createElement('p');
+                    pTag.innerText = "~" + nameWithoutExt;
+                    item.appendChild(pTag);
+                }
+            });
+        });
+
+        // 🌟 2. 클릭하면 복사해 주는 함수 (위에서 자동으로 만들어진 이름표를 복사함)
+        function autoCopy(element) {
+            const command = element.querySelector('p').innerText;
+
+            navigator.clipboard.writeText(command).then(() => {
+                showToast(`'${command}' 복사 완료!`);
+            }).catch(err => {
+                alert('복사에 실패했습니다. 직접 드래그해서 복사해 주세요!');
+            });
+        }
+
+        // 토스트 알림창 띄우는 함수
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = "toast show";
+            setTimeout(function() { 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
