@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅콘 선택기</title>
+    <style>
+        /* 🎨 시청자들을 위한 깔끔한 블랙 테마 */
+        :root {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --accent: #00ffa3; /* 강조색 */
+            --text: #e0e0e0;
+        }
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        h1 { font-size: 24px; color: white; margin-bottom: 10px; }
+        .sub { color: #888; font-size: 14px; margin-bottom: 40px; }
+
+        .emoticon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .emoticon-item {
+            background: var(--card);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .emoticon-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+        .emoticon-item img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+        .emoticon-item p {
+            margin: 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #bbb;
+        }
+        .emoticon-item:hover p { color: var(--accent); }
+
+        /* 복사 알림창 */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: var(--accent);
+            color: #000;
+            font-weight: bold;
+            padding: 12px 24px;
+            position: fixed;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            border-radius: 50px;
+            z-index: 1000;
+        }
+        #toast.show { visibility: visible; animation: popUp 0.4s, fadeOut 0.4s 2.5s; }
+        @keyframes popUp { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <h1>채팅콘 메뉴판</h1>
+    <p class="sub">클릭하면 명령어가 복사됩니다!</p>
+
+    <div id="toast">복사 완료!</div>
+
+    <div class="emoticon-grid">
+        </div>
+
+    <script>
+        // 파일명을 읽어서 자동으로 ~이름표를 달아주는 함수
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.emoticon-item').forEach(item => {
+                const img = item.querySelector('img');
+                if (img) {
+                    const src = img.getAttribute('src');
+                    const fileName = decodeURIComponent(src.split('/').pop());
+                    const nameOnly = fileName.substring(0, fileName.lastIndexOf('.'));
+                    const p = document.createElement('p');
+                    p.innerText = "~" + nameOnly;
+                    item.appendChild(p);
+                }
+            });
+        });
+
+        // 클릭 시 복사 기능 (모바일/PC 공용)
+        function autoCopy(el) {
+            const cmd = el.querySelector('p').innerText;
+            const t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = cmd; t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+            
+            const toast = document.getElementById('toast');
+            toast.innerText = `'${cmd}' 복사 완료!`;
+            toast.className = "show";
+            setTimeout(() => { toast.className = ""; }, 3000);
+        }
+    </script>
+</body>
+</html>
